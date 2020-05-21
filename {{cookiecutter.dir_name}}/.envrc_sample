@@ -1,0 +1,10 @@
+use_ruby
+
+export HAB_BLDR_URL="https://bldr.habitat.sh"
+export HAB_ORIGIN=<YOUR_ORIGIN>
+export HAB_AUTH_TOKEN=<YOUR_TOKEN>
+
+
+# Uncomment RUST_LOG for more supervisor debug
+# export RUST_LOG=debug
+export SSL_CERT_FILE=/usr/local/etc/openssl/cert.pem
