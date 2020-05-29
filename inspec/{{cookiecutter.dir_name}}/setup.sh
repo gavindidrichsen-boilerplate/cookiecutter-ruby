@@ -8,6 +8,6 @@ bundle install
 (
     mkdir -p profiles
     cd profiles
-    bundle exec inspec init profile hello_world
+    bundle exec inspec init profile hello_world --overwrite
 )
 bundle exec inspec exec ./profiles/hello_world

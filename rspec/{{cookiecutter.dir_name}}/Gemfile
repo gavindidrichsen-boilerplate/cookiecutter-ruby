@@ -11,7 +11,7 @@ gem 'bundle'
 # In the mean time the gem can be added here for local development
 
 # Use Latest Inspec
-gem 'inspec-bin'
+# gem 'inspec-bin'
 
 gem 'rubocop', require: false
 
