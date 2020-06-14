@@ -8,10 +8,17 @@ Install all the required gems:
 ./setup.sh
 ```
 
-Note that a clean hanami application has been created beneath the {{cookiecutter.hanami_application}} directory.  You can manually create the same with the following command
+Note that shortcuts are available as aliases and defined in the .env/bin directory:
+
+* beh = bundle exec hanami
+* begc = bundle exec guard --clear
+* bera = bundle exec rake
+
+Also a clean hanami application has been created beneath the {{cookiecutter.hanami_application}} directory.  You can manually create the same with the following command
 
 ```bash
-bundle exec hanami new {{cookiecutter.hanami_application}}
+# bundle exec hanamai new {{cookiecutter.hanami_application}}
+beh new {{cookiecutter.hanami_application}}
 ```
 
 To create your first action do something like:
@@ -19,20 +26,16 @@ To create your first action do something like:
 ```bash
 # NOTE books/index NOT books#index
 cd {{cookiecutter.hanami_application}}
-bundle exec hanami generate action web books/index
+# bundle exec hanamai generate action web books/index
+beh generate action web books/index
 ```
 
 Start Guard to continuously monitor the tests:
 
 ```bash
-bundle exec guard --clear
+# bundle exec guard --clear
+begc
 ```
-
-Note that shortcuts are available as aliases and defined in the .env/bin directory:
-
-* beh = bundle exec hanami
-* begc = bundle exec guard --clear
-* bera = bundle exec rake
 
 Some of the avaliable hanami commands are as follows:
 
