@@ -7,6 +7,6 @@ __dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 # configure bundle
 bundle config set path "${__dir}/../vendor/bundle"
-bundle install
+bundle install --path "${__dir}/../vendor/bundle"
 
 # Do any other automated setup that you need to do here

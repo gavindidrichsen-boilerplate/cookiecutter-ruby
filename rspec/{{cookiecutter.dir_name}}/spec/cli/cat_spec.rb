@@ -1,4 +1,4 @@
-describe "features/cli/cat", :type => :aruba do
+describe "cli/cat", :type => :aruba do
   let(:file) { "file.txt" }
   let(:content) { "Hello, Aruba!" }
 
