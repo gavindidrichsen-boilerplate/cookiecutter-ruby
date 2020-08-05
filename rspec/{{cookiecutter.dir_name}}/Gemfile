@@ -1,5 +1,10 @@
 source "https://rubygems.org"
 
+# Load local gem
+gemspec
+
+gem 'standard'
+
 gem 'bundle'
 # Note that 'aws-sdk' pulls in a large number of libraries, choose explicitly those to include instead
 # gem 'aws-sdk', '~> 3'
@@ -13,12 +18,13 @@ gem 'bundle'
 # Use Latest Inspec
 # gem 'inspec-bin'
 
-gem 'rubocop', require: false
+# gem 'rubocop', require: false
 
 group :development do
   gem 'rake'
   gem 'minitest'
   gem 'rspec'
+  gem 'aruba'
   gem 'pry-byebug'
   
   gem 'guard'
