@@ -1,4 +1,5 @@
 require 'rspec/core/rake_task'
+require "standard/rake"
 
 # Default directory to look within is `/specs`
 # Run with `rake spec`

@@ -3,6 +3,6 @@
 __dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 (
-    cd ${__dir}/..
+    cd ${__dir}/../..
     bundle exec rake "${@}"
 )
