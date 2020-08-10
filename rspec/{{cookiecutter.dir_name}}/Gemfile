@@ -3,9 +3,9 @@ source "https://rubygems.org"
 # Load local gem
 gemspec
 
-gem 'standard'
+gem "standard"
 
-gem 'bundle'
+gem "bundle"
 # Note that 'aws-sdk' pulls in a large number of libraries, choose explicitly those to include instead
 # gem 'aws-sdk', '~> 3'
 #
@@ -21,13 +21,13 @@ gem 'bundle'
 # gem 'rubocop', require: false
 
 group :development do
-  gem 'rake'
-  gem 'minitest'
-  gem 'rspec'
-  gem 'aruba'
-  gem 'pry-byebug'
-  
-  gem 'guard'
-  gem 'guard-shell'
-  gem 'guard-rspec'
+  gem "rake"
+  gem "minitest"
+  gem "rspec"
+  gem "aruba"
+  gem "pry-byebug"
+
+  gem "guard"
+  gem "guard-shell"
+  gem "guard-rspec"
 end

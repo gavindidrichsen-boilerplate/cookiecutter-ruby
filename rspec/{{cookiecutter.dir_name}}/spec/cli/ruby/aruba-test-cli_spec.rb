@@ -1,5 +1,5 @@
-describe "cli/ruby/aruba-test-cli.rb", :type => :aruba do
-  it "should fail if no file defined" do 
+describe "cli/ruby/aruba-test-cli.rb", type: :aruba do
+  it "should fail if no file defined" do
     run_command("aruba-test-cli.rb")
     expect(last_command_started).to have_output(/aruba-test-cli \[file\]: Filename is missing/)
   end

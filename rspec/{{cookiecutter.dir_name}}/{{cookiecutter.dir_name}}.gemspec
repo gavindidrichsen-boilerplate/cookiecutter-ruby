@@ -1,19 +1,18 @@
-
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "{{cookiecutter.dir_name}}/version"
 
 # UNCOMMENT below when the gem is ready for pushing to github
 Gem::Specification.new do |spec|
-  spec.name          = "{{cookiecutter.dir_name}}"
-  spec.version       = {{cookiecutter.dir_name | capitalize}}::VERSION
-  spec.authors       = ["Gavin Didrichsen"]
-  spec.email         = ["gavin.didrichsen@gmail.com"]
+  spec.name = "{{cookiecutter.dir_name}}"
+  spec.version = {{cookiecutter.dir_name | capitalize}}::VERSION
+  spec.authors = ["Gavin Didrichsen"]
+  spec.email = ["gavin.didrichsen@gmail.com"]
 
-  spec.summary       = "Short summary for the '{{cookiecutter.dir_name}}' gem (because RubyGems requires one)"
+  spec.summary = "Short summary for the '{{cookiecutter.dir_name}}' gem (because RubyGems requires one)"
   # spec.description   = "Longer description of the '{{cookiecutter.dir_name}}' gem (not required by RubyGems)"
   # spec.homepage      = "TODO: Put your gem's website or public repo URL here."
-  spec.license       = "MIT"
+  spec.license = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -29,11 +28,11 @@ Gem::Specification.new do |spec|
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
-  spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
+  spec.files = Dir.chdir(File.expand_path("..", __FILE__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   end
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.bindir = "exe"
+  spec.executables = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   # spec.add_development_dependency "bundler", "~> 2.1.4"
