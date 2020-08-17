@@ -16,4 +16,8 @@ guard :shell do
     # `say -v cello #{m[0]}`
     `bundle exec inspec exec #{m[0]}`
   end
+
+  watch(/.+\.rb$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
+  watch(/Rakefile$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
+  watch(/Gemfile$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
 end
