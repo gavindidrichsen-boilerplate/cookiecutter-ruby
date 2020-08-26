@@ -1,6 +1,6 @@
 describe "cli/rake", type: :aruba do
   it "should return --tasks" do
     run_command("bera --tasks")
-    expect(last_command_started).to have_output(/rake spec  # Run RSpec code examples/)
+    expect(all_stdout.to_s).to match(/rake spec\s+# Run RSpec code examples/)
   end
 end
