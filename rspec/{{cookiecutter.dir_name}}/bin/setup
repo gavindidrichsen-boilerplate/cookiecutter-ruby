@@ -5,6 +5,9 @@ set -vx
 
 __dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
+# update to latest bundler only if this fails
+if ! bundle --version; then gem install bundler; fi
+
 # configure bundle
 bundle config set path "${__dir}/../vendor/bundle"
 bundle install --path "${__dir}/../vendor/bundle"
