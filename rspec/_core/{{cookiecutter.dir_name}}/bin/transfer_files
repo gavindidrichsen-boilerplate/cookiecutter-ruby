@@ -1,0 +1,81 @@
+
+#!/usr/bin/env bash
+set -e
+
+# See https://gist.github.com/mujz/38c52123104b2f26f7a179dd1e3ce194
+
+_rsync_upload() {
+    # sync the changes and deletions in the local dir with the remote dir
+    # excluding everything rsync_exclusion_list.txt file.  Note, the .gitignore
+    # exclusion has been removed for the upload because we want the config data
+    # to be uploaded to AWS but NOT downloaded!
+    set -x
+    rsync -aiz --delete \
+      --exclude-from $PWD/data/rsync_exclusion_list.txt \
+      ${LOCAL_DIR}/. ${REMOTE_DIR}
+    set +x
+}
+
+_rsync_download() {
+    # sync the changes and deletions in the local dir with the remote dir
+    # excluding everything in the .gitignore and rsync_exclusion_list.txt files
+    set -x
+    rsync -aiz --delete --exclude-from "${LOCAL_DIR}/.gitignore" --exclude-from $PWD/data/rsync_exclusion_list.txt ${REMOTE_DIR}/. ${LOCAL_DIR}
+    set +x
+}
+
+
+################################################################################
+####    PUBLIC METHODS    ######################################################
+################################################################################
+upload() {
+  # rsync on start and then only when files change
+  _rsync_upload
+  watch="fswatch -txr -f '%H:%M:%S' \
+    -e '.git' -e '\.sw.*' \
+    --event Created --event Updated --event Removed --event Renamed --event MovedFrom --event MovedTo \
+    \"${LOCAL_DIR}\""
+  eval "${watch}" | while read notification; do
+    echo "### ${notification}"
+    _rsync_upload
+  done
+}
+
+download() {
+  # rsync on start and then only when files change
+  _rsync_download
+  while true; do
+    echo "### DOWNLOADING"
+    _rsync_download
+    sleep 10
+  done
+}
+
+help() {
+	cat <<-EOF
+	./$(basename "$0") help
+	
+	# start upload daemon
+	./$(basename "$0") upload
+
+	# start download daemon
+	./$(basename "$0") download
+	EOF
+}
+
+################################################################################
+####    MAIN    ################################################################
+################################################################################
+
+# bomb out if no parameters passed in
+if [[ ("${@}" == "") ]]; then help && exit 0; fi
+
+# bomb out if fswatch isn't installed
+if ! which fswatch 2>/dev/null; then echo "fswatch must be installed before executing" && exit 1; fi
+
+# bomb out if local and remote dirs locations env vars are set
+if [ -z ${REMOTE_DIR} ]; then echo "please set the environment variable REMOTE_DIR (ex. /home/user/prj_dir)" && exit 1; fi
+if [ -z ${LOCAL_DIR} ]; then echo "please set the environment variable LOCAL_DIR (format: user@host:dir)" && exit 1; fi
+
+# evaluate input
+"${@}"
