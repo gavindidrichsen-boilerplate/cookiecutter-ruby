@@ -1,3 +1,0 @@
-ignore:
-  - 'spec/**/*':
-    - Lint/MissingSuper
