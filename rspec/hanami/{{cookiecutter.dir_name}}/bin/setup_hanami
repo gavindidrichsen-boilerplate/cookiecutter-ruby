@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+set -vx
+
+__dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+# {{cookiecutter.hanami_application}} part 1: append to top-level Gemfile
+if ! grep -q 'gem "hanami"' ${__dir}/../Gemfile; then
+cat <<-EOF >> ${__dir}/../Gemfile
+
+	# hanami
+	gem "hanami"
+	EOF
+fi
+
+# bundle install from top-level Gemfile
+${__dir}/setup
+
+# {{cookiecutter.hanami_application}} part 2: setup hanami application framework
+if [[ ! -d {{cookiecutter.hanami_application}} ]]; then 
+	bundle exec hanami new {{cookiecutter.hanami_application}} --database=sqlite --application-name=api --test=rspec
+fi
+if [[ ! -f {{cookiecutter.hanami_application}}/Guardfile ]]; then cp .Guardfile {{cookiecutter.hanami_application}}/Guardfile; fi
+
+# ensure rspec result file exists to prevent intermittent errors from occurring
+mkdir -p {{cookiecutter.hanami_application}}/tmp
+touch {{cookiecutter.hanami_application}}/tmp/rspec_guard_result
+
+# copy all setup code to {{cookiecutter.hanami_application}} 
+cp -R ${__dir}/../.env {{cookiecutter.hanami_application}}/. 
+cp -R ${__dir}/../bin {{cookiecutter.hanami_application}}/. 
+cp ${__dir}/../.envrc {{cookiecutter.hanami_application}}/. 
+cp ${__dir}/../.ruby-version {{cookiecutter.hanami_application}}/. 
