@@ -19,7 +19,7 @@ ${__dir}/setup
 
 # {{cookiecutter.hanami_application}} part 2: setup hanami application framework
 if [[ ! -d {{cookiecutter.hanami_application}} ]]; then 
-	bundle exec hanami new {{cookiecutter.hanami_application}} --database=sqlite --application-name=api --test=rspec
+	bundle exec hanami new {{cookiecutter.hanami_application}} --database=sqlite --application-name=web --test=rspec
 fi
 if [[ ! -f {{cookiecutter.hanami_application}}/Guardfile ]]; then cp .Guardfile {{cookiecutter.hanami_application}}/Guardfile; fi
 
@@ -28,7 +28,18 @@ mkdir -p {{cookiecutter.hanami_application}}/tmp
 touch {{cookiecutter.hanami_application}}/tmp/rspec_guard_result
 
 # copy all setup code to {{cookiecutter.hanami_application}} 
-cp -R ${__dir}/../.env {{cookiecutter.hanami_application}}/. 
-cp -R ${__dir}/../bin {{cookiecutter.hanami_application}}/. 
-cp ${__dir}/../.envrc {{cookiecutter.hanami_application}}/. 
-cp ${__dir}/../.ruby-version {{cookiecutter.hanami_application}}/. 
+cp -R bin {{cookiecutter.hanami_application}}/. 
+cp .envrc {{cookiecutter.hanami_application}}/. 
+cp .ruby-version {{cookiecutter.hanami_application}}/. 
+
+# append more gems to the new hanami Gemfile
+if ! grep -q '# MY EXTRAS' {{cookiecutter.hanami_application}}/Gemfile; then
+cat <<-EOF >> {{cookiecutter.hanami_application}}/Gemfile
+
+	# MY EXTRAS
+	gem 'pry-byebug'
+	gem 'guard'
+	gem 'guard-shell'
+	gem 'guard-rspec'
+	EOF
+fi
