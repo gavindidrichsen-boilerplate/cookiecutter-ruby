@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 IFS=$'\n\t'
-set -vx
+# set -vx
 
 __dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 

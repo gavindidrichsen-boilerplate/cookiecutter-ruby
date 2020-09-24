@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 IFS=$'\n\t'
-set -vx
+# set -vx
 
 __dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
@@ -28,18 +28,31 @@ mkdir -p {{cookiecutter.hanami_application}}/tmp
 touch {{cookiecutter.hanami_application}}/tmp/rspec_guard_result
 
 # copy all setup code to {{cookiecutter.hanami_application}} 
-cp -R bin {{cookiecutter.hanami_application}}/. 
+cp -R bin {{cookiecutter.hanami_application}}/. && rm -f {{cookiecutter.hanami_application}}/bin/setup_hanami
 cp .envrc {{cookiecutter.hanami_application}}/. 
 cp .ruby-version {{cookiecutter.hanami_application}}/. 
 
 # append more gems to the new hanami Gemfile
-if ! grep -q '# MY EXTRAS' {{cookiecutter.hanami_application}}/Gemfile; then
+if ! grep -q '# Gemfile EXTRAS for {{cookiecutter.hanami_application}}' {{cookiecutter.hanami_application}}/Gemfile; then
 cat <<-EOF >> {{cookiecutter.hanami_application}}/Gemfile
 
-	# MY EXTRAS
+	# Gemfile EXTRAS for {{cookiecutter.hanami_application}}
 	gem 'pry-byebug'
 	gem 'guard'
 	gem 'guard-shell'
 	gem 'guard-rspec'
+	EOF
+fi
+
+# append more gems to the new hanami Gemfile
+if ! grep -q '# Guardfile EXTRAS for {{cookiecutter.hanami_application}}' {{cookiecutter.hanami_application}}/Guardfile; then
+cat <<-EOF >> {{cookiecutter.hanami_application}}/Guardfile
+
+	# Guardfile EXTRAS for {{cookiecutter.hanami_application}}
+	guard :shell do
+	  watch(/.+\.rb$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
+	  watch(/Rakefile$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
+	  watch(/Gemfile$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
+	end
 	EOF
 fi
