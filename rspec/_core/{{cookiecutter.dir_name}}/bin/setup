@@ -5,11 +5,18 @@ IFS=$'\n\t'
 
 __dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
+# source custom_setup only if it exists
+# if [[ -f ${__dir}/custom/setup ]]; then source ${__dir}/custom/setup; fi
+
+# do any custom PRE-setup if required (for example adding the hanami gem to Gemfile)
+set -x; if [[ -f ${__dir}/custom/setup ]]; then ${__dir}/custom/setup pre_setup; fi; set +x
+
 # update to latest bundler only if this fails
 if ! bundle --version; then gem install bundler; fi
 
 # configure bundle
-bundle config set path "${__dir}/../vendor/bundle"
+bundle config --local set path "${__dir}/../vendor/bundle"
 bundle install --path "${__dir}/../vendor/bundle"
 
-# Do any other automated setup that you need to do here
+# do any custom POST-setup if required (for example adding a Guardfile to a new generated project)
+set -x; if [[ -f ${__dir}/custom/setup ]]; then ${__dir}/custom/setup post_setup; fi; set +x

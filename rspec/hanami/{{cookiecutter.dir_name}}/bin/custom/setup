@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+#set -vx
+
+__dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+pre_setup(){
+	# bookshelf part 1: append to top-level Gemfile
+	if ! grep -q 'gem "hanami"' ${APPLICATION_ROOT}/Gemfile; then
+	cat <<-EOF >> ${APPLICATION_ROOT}/Gemfile
+
+		# hanami
+		gem "hanami"
+		EOF
+	fi
+}
+
+post_setup(){
+	(
+		cd ${APPLICATION_ROOT}
+		# bookshelf part 2: setup hanami application framework
+		if [[ ! -d bookshelf ]]; then 
+			bundle exec hanami new bookshelf --database=sqlite --application-name=web --test=rspec
+		fi
+		if [[ ! -f bookshelf/Guardfile ]]; then cp .Guardfile bookshelf/Guardfile; fi
+
+		# ensure rspec result file exists to prevent intermittent errors from occurring
+		mkdir -p bookshelf/tmp
+		touch bookshelf/tmp/rspec_guard_result
+
+		# copy all setup code to bookshelf 
+		cp -R bin bookshelf/. && rm -rf bookshelf/bin/custom
+		cp .envrc bookshelf/. 
+		cp .ruby-version bookshelf/. 
+
+		# append more gems to the new hanami Gemfile
+		if ! grep -q '# Gemfile EXTRAS for bookshelf' bookshelf/Gemfile; then
+		cat <<-EOF >> bookshelf/Gemfile
+
+			# Gemfile EXTRAS for bookshelf
+			gem 'pry-byebug'
+			gem 'guard'
+			gem 'guard-shell'
+			gem 'guard-rspec'
+			EOF
+		fi
+
+		# append more gems to the new hanami Gemfile
+		if ! grep -q '# Guardfile EXTRAS for bookshelf' bookshelf/Guardfile; then
+		cat <<-EOF >> bookshelf/Guardfile
+
+			# Guardfile EXTRAS for bookshelf
+			guard :shell do
+			  watch(/.+\.rb$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
+			  watch(/Rakefile$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
+			  watch(/Gemfile$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
+			end
+			EOF
+		fi
+	)
+}
+
+"${@}"
