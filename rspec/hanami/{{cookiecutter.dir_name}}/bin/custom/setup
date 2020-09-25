@@ -33,9 +33,15 @@ post_setup(){
 		cp -R bin {{cookiecutter.hanami_application}}/. && rm -rf {{cookiecutter.hanami_application}}/bin/custom
 		cp .envrc {{cookiecutter.hanami_application}}/. 
 		cp .ruby-version {{cookiecutter.hanami_application}}/. 
-		cat .gitignore >> {{cookiecutter.hanami_application}}/.gitignore
 
-		# append more gems to the new hanami Gemfile
+		# append _core gitgnore patterns
+		if ! grep -q '# _core ignore' {{cookiecutter.hanami_application}}/.gitignore; then
+			echo >> {{cookiecutter.hanami_application}}/.gitignore 
+			echo >> {{cookiecutter.hanami_application}}/.gitignore 
+			cat .gitignore >> {{cookiecutter.hanami_application}}/.gitignore
+		fi
+
+		# append more gems to the new {{cookiecutter.hanami_application}} Gemfile
 		if ! grep -q '# Gemfile EXTRAS for {{cookiecutter.hanami_application}}' {{cookiecutter.hanami_application}}/Gemfile; then
 		cat <<-EOF >> {{cookiecutter.hanami_application}}/Gemfile
 
@@ -47,7 +53,7 @@ post_setup(){
 			EOF
 		fi
 
-		# append more gems to the new hanami Gemfile
+		# append more gems to the new {{cookiecutter.hanami_application}} Gemfile
 		if ! grep -q '# Guardfile EXTRAS for {{cookiecutter.hanami_application}}' {{cookiecutter.hanami_application}}/Guardfile; then
 		cat <<-EOF >> {{cookiecutter.hanami_application}}/Guardfile
 
