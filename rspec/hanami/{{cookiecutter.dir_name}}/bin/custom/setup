@@ -6,7 +6,7 @@ IFS=$'\n\t'
 __dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 pre_setup(){
-	# bookshelf part 1: append to top-level Gemfile
+	# {{cookiecutter.hanami_application}} part 1: append to top-level Gemfile
 	if ! grep -q 'gem "hanami"' ${APPLICATION_ROOT}/Gemfile; then
 	cat <<-EOF >> ${APPLICATION_ROOT}/Gemfile
 
@@ -19,26 +19,27 @@ pre_setup(){
 post_setup(){
 	(
 		cd ${APPLICATION_ROOT}
-		# bookshelf part 2: setup hanami application framework
-		if [[ ! -d bookshelf ]]; then 
-			bundle exec hanami new bookshelf --database=sqlite --application-name=web --test=rspec
+		# {{cookiecutter.hanami_application}} part 2: setup hanami application framework
+		if [[ ! -d {{cookiecutter.hanami_application}} ]]; then 
+			bundle exec hanami new {{cookiecutter.hanami_application}} --database=sqlite --application-name=web --test=rspec
 		fi
-		if [[ ! -f bookshelf/Guardfile ]]; then cp .Guardfile bookshelf/Guardfile; fi
+		if [[ ! -f {{cookiecutter.hanami_application}}/Guardfile ]]; then cp .Guardfile {{cookiecutter.hanami_application}}/Guardfile; fi
 
 		# ensure rspec result file exists to prevent intermittent errors from occurring
-		mkdir -p bookshelf/tmp
-		touch bookshelf/tmp/rspec_guard_result
+		mkdir -p {{cookiecutter.hanami_application}}/tmp
+		touch {{cookiecutter.hanami_application}}/tmp/rspec_guard_result
 
-		# copy all setup code to bookshelf 
-		cp -R bin bookshelf/. && rm -rf bookshelf/bin/custom
-		cp .envrc bookshelf/. 
-		cp .ruby-version bookshelf/. 
+		# copy all setup code to {{cookiecutter.hanami_application}} 
+		cp -R bin {{cookiecutter.hanami_application}}/. && rm -rf {{cookiecutter.hanami_application}}/bin/custom
+		cp .envrc {{cookiecutter.hanami_application}}/. 
+		cp .ruby-version {{cookiecutter.hanami_application}}/. 
+		cat .gitignore >> {{cookiecutter.hanami_application}}/.gitignore
 
 		# append more gems to the new hanami Gemfile
-		if ! grep -q '# Gemfile EXTRAS for bookshelf' bookshelf/Gemfile; then
-		cat <<-EOF >> bookshelf/Gemfile
+		if ! grep -q '# Gemfile EXTRAS for {{cookiecutter.hanami_application}}' {{cookiecutter.hanami_application}}/Gemfile; then
+		cat <<-EOF >> {{cookiecutter.hanami_application}}/Gemfile
 
-			# Gemfile EXTRAS for bookshelf
+			# Gemfile EXTRAS for {{cookiecutter.hanami_application}}
 			gem 'pry-byebug'
 			gem 'guard'
 			gem 'guard-shell'
@@ -47,10 +48,10 @@ post_setup(){
 		fi
 
 		# append more gems to the new hanami Gemfile
-		if ! grep -q '# Guardfile EXTRAS for bookshelf' bookshelf/Guardfile; then
-		cat <<-EOF >> bookshelf/Guardfile
+		if ! grep -q '# Guardfile EXTRAS for {{cookiecutter.hanami_application}}' {{cookiecutter.hanami_application}}/Guardfile; then
+		cat <<-EOF >> {{cookiecutter.hanami_application}}/Guardfile
 
-			# Guardfile EXTRAS for bookshelf
+			# Guardfile EXTRAS for {{cookiecutter.hanami_application}}
 			guard :shell do
 			  watch(/.+\.rb$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
 			  watch(/Rakefile$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
