@@ -15,8 +15,8 @@ set -x; if [[ -f ${__dir}/custom/setup ]]; then ${__dir}/custom/setup pre_setup;
 if ! bundle --version; then gem install bundler; fi
 
 # configure bundle
-bundle config --local set path "${__dir}/../vendor/bundle"
-bundle install --path "${__dir}/../vendor/bundle"
+bundle config set path "${APPLICATION_ROOT}/vendor/bundle"
+bundle install --path "${APPLICATION_ROOT}/vendor/bundle"
 
 # do any custom POST-setup if required (for example adding a Guardfile to a new generated project)
 set -x; if [[ -f ${__dir}/custom/setup ]]; then ${__dir}/custom/setup post_setup; fi; set +x
