@@ -24,7 +24,6 @@ post_setup(){
 		if [[ ! -d {{cookiecutter.hanami_application}} ]]; then 
 			bundle exec hanami new {{cookiecutter.hanami_application}} --database=sqlite --application-name=web --test=rspec
 		fi
-		if [[ ! -f {{cookiecutter.hanami_application}}/Guardfile ]]; then cp .Guardfile {{cookiecutter.hanami_application}}/Guardfile; fi
 
 		# ensure rspec result file exists to prevent intermittent errors from occurring
 		mkdir -p {{cookiecutter.hanami_application}}/tmp
@@ -46,29 +45,13 @@ post_setup(){
 		fi
 
 		# append more gems to the new {{cookiecutter.hanami_application}} Gemfile
-		if ! grep -q '# Gemfile EXTRAS for {{cookiecutter.hanami_application}}' {{cookiecutter.hanami_application}}/Gemfile; then
-		cat <<-EOF >> {{cookiecutter.hanami_application}}/Gemfile
-
-			# Gemfile EXTRAS for {{cookiecutter.hanami_application}}
-			gem 'pry-byebug'
-			gem 'guard'
-			gem 'guard-shell'
-			gem 'guard-rspec'
-			gem 'standard'
-			EOF
+		if ! grep -q '# Gemfile EXTRAS' {{cookiecutter.hanami_application}}/Gemfile; then
+			cat ${APPLICATION_ROOT}/bin/custom/.Gemfile >> {{cookiecutter.hanami_application}}/Gemfile
 		fi
 
 		# append more gems to the new {{cookiecutter.hanami_application}} Gemfile
-		if ! grep -q '# Guardfile EXTRAS for {{cookiecutter.hanami_application}}' {{cookiecutter.hanami_application}}/Guardfile; then
-		cat <<-EOF >> {{cookiecutter.hanami_application}}/Guardfile
-
-			# Guardfile EXTRAS for {{cookiecutter.hanami_application}}
-			guard :shell do
-			  watch(/.+\.rb$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
-			  watch(/Rakefile$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
-			  watch(/Gemfile$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
-			end
-			EOF
+		if [[ ! -f {{cookiecutter.hanami_application}}/Guardfile ]]; then 
+			cp ${APPLICATION_ROOT}/bin/custom/.Guardfile {{cookiecutter.hanami_application}}/Guardfile
 		fi
 	)
 }
