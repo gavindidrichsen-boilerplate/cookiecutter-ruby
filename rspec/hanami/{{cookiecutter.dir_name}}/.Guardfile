@@ -9,10 +9,16 @@ guard 'rspec', cmd: 'bundle exec rspec --color --format doc'  do
     watch(%r{^spec/.+_spec\.rb$})
     watch(%r{^apps/(.+)\.rb$})                           { |m| "spec/#{m[1]}_spec.rb" }
     watch(%r{^apps/(.*)(.html)(\.erb|\.haml|\.slim)$})   { |m| "spec/#{m[1].gsub('templates', 'views')}_spec.rb" }
-    watch(%r{^lib/(.+)\.rb$})                            { |m| "spec/lib/#{m[1]}_spec.rb" }
+    watch(%r{^lib/(.+)\.rb$})                            { |m| "spec/#{m[1]}_spec.rb" }
     
     # TODO: run integration tests on specific changes
     # watch(%r{^apps/controllers/(.+)_(controller)\.rb$})  { |m| ["spec/routing/#{m[1]}_routing_spec.rb", "spec/#{m[2]}s/#{m[1]}_#{m[2]}_spec.rb", "spec/acceptance/#{m[1]}_spec.rb"] }
 end
 
+# Guardfile EXTRAS for my_application
+guard :shell do
+  watch(/.+\.rb$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
+  watch(/Rakefile$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
+  watch(/Gemfile$/) { |m|`bundle exec standardrb --fix #{m[0]}` }
+end
 
