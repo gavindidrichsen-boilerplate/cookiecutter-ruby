@@ -20,40 +20,55 @@ post_setup(){
 	(
 		cd ${APPLICATION_ROOT}
 
-		# {{cookiecutter.hanami_application}} part 2: setup hanami application framework
+		# create hanami {{cookiecutter.hanami_application}} application and remove .git
 		if [[ ! -d {{cookiecutter.hanami_application}} ]]; then 
 			bundle exec hanami new {{cookiecutter.hanami_application}} --database=sqlite --application-name=web --test=rspec
-		fi
 
-		# ensure rspec result file exists to prevent intermittent errors from occurring
-		mkdir -p {{cookiecutter.hanami_application}}/tmp
-		touch {{cookiecutter.hanami_application}}/tmp/rspec_guard_result
-
-		# copy all setup code to {{cookiecutter.hanami_application}} 
-		cp -R bin {{cookiecutter.hanami_application}}/. && rm -rf {{cookiecutter.hanami_application}}/bin/custom
-		cp .envrc {{cookiecutter.hanami_application}}/. 
-		cp .ruby-version {{cookiecutter.hanami_application}}/. 
-
-		# remove the .git from the new {{cookiecutter.hanami_application}} application
-		rm -rf {{cookiecutter.hanami_application}}/.git
-
-		# append _core gitgnore patterns
-		if ! grep -q '# _core ignore' {{cookiecutter.hanami_application}}/.gitignore; then
-			echo >> {{cookiecutter.hanami_application}}/.gitignore 
-			echo >> {{cookiecutter.hanami_application}}/.gitignore 
-			cat .gitignore >> {{cookiecutter.hanami_application}}/.gitignore
-		fi
-
-		# append more gems to the new {{cookiecutter.hanami_application}} Gemfile
-		if ! grep -q '# Gemfile EXTRAS' {{cookiecutter.hanami_application}}/Gemfile; then
-			cat ${APPLICATION_ROOT}/bin/custom/.Gemfile >> {{cookiecutter.hanami_application}}/Gemfile
-		fi
-
-		# append more gems to the new {{cookiecutter.hanami_application}} Gemfile
-		if [[ ! -f {{cookiecutter.hanami_application}}/Guardfile ]]; then 
-			cp ${APPLICATION_ROOT}/bin/custom/.Guardfile {{cookiecutter.hanami_application}}/Guardfile
+			# remove the .git from the new {{cookiecutter.hanami_application}} application
+			rm -rf {{cookiecutter.hanami_application}}/.git
 		fi
 	)
+
+	# ensure rspec result file exists to prevent intermittent errors from occurring
+	mkdir -p ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/tmp
+	touch ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/tmp/rspec_guard_result
+
+	# copy all setup code to {{cookiecutter.hanami_application}} 
+	cp -R ${APPLICATION_ROOT}/bin ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/. && rm -rf ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/bin/custom
+	cp ${APPLICATION_ROOT}/.envrc ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/. 
+	cp ${APPLICATION_ROOT}/.ruby-version ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/. 
+	cp ${APPLICATION_ROOT}/.ruby-version ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/. 
+	cp ${APPLICATION_ROOT}/.standard.yml ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/. 
+
+	# append _core gitgnore patterns
+	if ! grep -q '# _core ignore' ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/.gitignore; then
+		echo >> ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/.gitignore 
+		echo >> ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/.gitignore 
+		cat ${APPLICATION_ROOT}/.gitignore >> ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/.gitignore
+	fi
+
+	# append more gems to the new {{cookiecutter.hanami_application}} Gemfile
+	if ! grep -q '# Gemfile EXTRAS' ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/Gemfile; then
+		cat ${APPLICATION_ROOT}/bin/custom/.Gemfile >> ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/Gemfile
+	fi
+
+	# append custom rake tasks to {{cookiecutter.hanami_application}} Rakefile
+	if ! grep -q '# Rakefile EXTRAS' ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/Rakefile; then
+		cat ${APPLICATION_ROOT}/bin/custom/.Rakefile >> ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/Rakefile
+	fi
+	if [[ ! -f ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/apps/rake/namespaces/custom/tasks.rake ]]; then 
+		mkdir -p ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/apps/rake/namespaces/custom
+		cp ${APPLICATION_ROOT}/bin/custom/.custom_tasks.rake ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/apps/rake/namespaces/custom/tasks.rake
+	fi
+
+	# add new {{cookiecutter.hanami_application}} Guardfile
+	if [[ ! -f ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/Guardfile ]]; then 
+		cp ${APPLICATION_ROOT}/bin/custom/.Guardfile ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/Guardfile
+	fi
+	
+	# add interactors directory to {{cookiecutter.hanami_application}}
+	mkdir -p ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/lib/{{cookiecutter.hanami_application}}/interactors ]]
+	mkdir -p ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/spec/{{cookiecutter.hanami_application}}/interactors ]]
 }
 
 "${@}"
