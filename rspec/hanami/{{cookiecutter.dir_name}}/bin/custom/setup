@@ -52,23 +52,17 @@ post_setup(){
 		cat ${APPLICATION_ROOT}/bin/custom/.Gemfile >> ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/Gemfile
 	fi
 
-	# append custom rake tasks to {{cookiecutter.hanami_application}} Rakefile
-	if ! grep -q '# Rakefile EXTRAS' ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/Rakefile; then
-		cat ${APPLICATION_ROOT}/bin/custom/.Rakefile >> ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/Rakefile
-	fi
-	if [[ ! -f ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/apps/rake/namespaces/custom/tasks.rake ]]; then 
-		mkdir -p ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/apps/rake/namespaces/custom
-		cp ${APPLICATION_ROOT}/bin/custom/.custom_tasks.rake ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/apps/rake/namespaces/custom/tasks.rake
-	fi
-
 	# add new {{cookiecutter.hanami_application}} Guardfile
 	if [[ ! -f ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/Guardfile ]]; then 
 		cp ${APPLICATION_ROOT}/bin/custom/.Guardfile ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/Guardfile
 	fi
 	
 	# add interactors directory to {{cookiecutter.hanami_application}}
-	mkdir -p ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/lib/{{cookiecutter.hanami_application}}/interactors ]]
-	mkdir -p ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/spec/{{cookiecutter.hanami_application}}/interactors ]]
+	mkdir -p ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/lib/{{cookiecutter.hanami_application}}/interactors
+	mkdir -p ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/spec/{{cookiecutter.hanami_application}}/interactors
+
+  # ensure the gemspec config is setup (and also dynamic loading from ./lib/{{cookiecutter.hanami_application}}.rb)
+  cookiecutter ${COOKIE}/cookiecutter-clean-ruby-app/_core -f gem_name='{{ cookiecutter.hanami_application }}'
 }
 
 "${@}"
