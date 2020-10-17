@@ -1,8 +1,8 @@
 source "https://rubygems.org"
 
-gem 'bundle'
-# Note that 'aws-sdk' pulls in a large number of libraries, choose explicitly those to include instead
-# gem 'aws-sdk', '~> 3'
+gem "bundle"
+# Note that "aws-sdk" pulls in a large number of libraries, choose explicitly those to include instead
+# gem "aws-sdk", "~> 3"
 #
 # See service list here: https://docs.aws.amazon.com/sdk-for-ruby/v3/api/index.html
 #
@@ -11,17 +11,17 @@ gem 'bundle'
 # In the mean time the gem can be added here for local development
 
 # Use Latest Inspec
-gem 'inspec-bin'
+gem "inspec-bin"
 
-gem 'rubocop', require: false
+gem "rubocop", require: false
 
 group :development do
-  gem 'rake'
-  gem 'minitest'
-  gem 'rspec'
-  gem 'pry-byebug'
+  gem "rake"
+  gem "minitest"
+  gem "rspec"
+  gem "pry-byebug"
   
-  gem 'guard'
-  gem 'guard-shell'
-  gem 'guard-rspec'
+  gem "guard"
+  gem "guard-shell"
+  gem "guard-rspec"
 end

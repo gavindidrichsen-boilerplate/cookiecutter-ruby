@@ -12,7 +12,7 @@ end
 
 guard :shell do
   watch(%r{^profiles/(.+)\.rb$}) do |m|
-    # n m[0], 'Changed'
+    # n m[0], "Changed"
     # `say -v cello #{m[0]}`
     `bundle exec inspec exec #{m[0]}`
   end
