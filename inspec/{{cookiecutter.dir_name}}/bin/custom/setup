@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+#set -vx
+
+__dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+pre_setup(){
+	# part 1: append to top-level Gemfile
+	if ! grep -q 'gem "inspec-bin"' ${APPLICATION_ROOT}/Gemfile; then
+	cat <<-EOF >> ${APPLICATION_ROOT}/Gemfile
+
+		# inspec
+		gem "inspec-bin"
+		EOF
+	fi
+}
+
+post_setup(){
+	(
+		cd ${APPLICATION_ROOT}
+
+		# create a dummy test profile
+		if [[ ! -d profiles/hello_world ]]; then 
+			mkdir -p profiles
+
+			# hack: create the 'hello_world' profile at $APPLICATION_ROOT and then move to ./profiles
+			bundle exec inspec init profile hello_world --overwrite --chef-license=accept 
+			mv hello_world profiles/.
+
+			# run the tests
+			bundle exec inspec exec ./profiles/hello_world
+		fi
+
+	)
+
+}
+
+"${@}"
