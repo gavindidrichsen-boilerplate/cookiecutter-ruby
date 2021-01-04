@@ -8,5 +8,5 @@ fi
 # go up a directory so that the 'simple_binary' is added to the correct directory
 (
   cd ../.
-  cookiecutter ${COOKIE}/cookiecutter-ruby/rspec/_core -f --no-input dir_name='{{ cookiecutter.dir_name }}'
+  cookiecutter ${COOKIE}/cookiecutter-ruby/_core -f --no-input dir_name='{{ cookiecutter.dir_name }}'
 )

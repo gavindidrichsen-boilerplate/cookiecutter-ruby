@@ -8,6 +8,6 @@ fi
 (
   # ensure the _core project is already present
   cd ..
-  cookiecutter ${COOKIE}/cookiecutter-ruby/rspec/_core -f --no-input \
+  cookiecutter ${COOKIE}/cookiecutter-ruby/_core -f --no-input \
     dir_name='{{ cookiecutter.dir_name }}'
 )
