@@ -60,9 +60,6 @@ post_setup(){
 	# add interactors directory to {{cookiecutter.hanami_application}}
 	mkdir -p ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/lib/{{cookiecutter.hanami_application}}/interactors
 	mkdir -p ${APPLICATION_ROOT}/{{cookiecutter.hanami_application}}/spec/{{cookiecutter.hanami_application}}/interactors
-
-  # ensure the gemspec config is setup (and also dynamic loading from ./lib/{{cookiecutter.hanami_application}}.rb)
-  cookiecutter ${COOKIE}/cookiecutter-clean-ruby-app/_core -f gem_name='{{ cookiecutter.hanami_application }}'
 }
 
 "${@}"
